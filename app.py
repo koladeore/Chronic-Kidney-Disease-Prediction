@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import joblib
 import os
+from PIL import Image
 
 # Load the trained model and dataset for column reference
 df = pd.read_csv('heart.csv')
@@ -14,6 +15,13 @@ if os.path.exists('ckd_model.pkl'):
 else:
     st.error("Model file not found. Please train the model first.")
     st.stop()  # Stop the script if the model is not found
+
+# Load metrics if available
+if os.path.exists('metrics.pkl'):
+    metrics = joblib.load('metrics.pkl')
+else:
+    st.error("Metrics file not found. Please ensure the model is trained and metrics are saved.")
+    st.stop()  # Stop the script if metrics are not found
 
 # Create a Streamlit app
 st.title('Chronic Kidney Disease Prediction')
@@ -49,3 +57,18 @@ prediction = model.predict(inputs)
 # Display the prediction
 predicted_class = 'Yes' if prediction[0] >= 0.5 else 'No'
 st.write(f'Prediction: {predicted_class}')
+
+# Display additional metrics and plots
+st.header('Model Performance Metrics')
+st.write(f'Precision: {metrics["precision"]}')
+st.write(f'F1 Score: {metrics["f1_score"]}')
+st.write(f'Accuracy: {metrics["accuracy"]}')
+st.write(f'Mean Squared Error: {metrics["mse"]}')
+
+# Display Confusion Matrix
+if os.path.exists('confusion_matrix.png'):
+    st.image(Image.open('confusion_matrix.png'), caption='Confusion Matrix')
+
+# Display Loss vs. Accuracy Plot
+if os.path.exists('loss_vs_accuracy.png'):
+    st.image(Image.open('loss_vs_accuracy.png'), caption='Loss vs Predicted Values')
