@@ -5,7 +5,7 @@ import joblib
 import os
 from PIL import Image
 
-# Load the trained model and dataset for column reference
+# Load the dataset for column reference
 df = pd.read_csv('heart.csv')
 
 # Check if the model file exists
@@ -24,9 +24,9 @@ else:
     st.stop()  # Stop the script if metrics are not found
 
 # Create a Streamlit app
-st.title('Chronic Kidney Disease Prediction')
+st.title('Chronic Kidney Disease Prediction using Multiple Linear Regression')
 
-# Mapping of columns to full names
+# Mapping of columns to full names for better UX
 column_full_names = {
     "Bp": "Blood Pressure",
     "Sg": "Specific Gravity",
